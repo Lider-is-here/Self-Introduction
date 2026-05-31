@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>李妍越 - AI & ML Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">LYY</a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link">首页</a></li>
+                <li><a href="#about" class="nav-link">关于</a></li>
+                <li><a href="#skills" class="nav-link">技能</a></li>
+                <li><a href="#works" class="nav-link">作品</a></li>
+                <li><a href="#contact" class="nav-link">联系</a></li>
+            </ul>
+            <div class="social-icons">
+                <a href="https://github.com/Lider-is-here" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="mailto:lider517@163.com" target="_blank"><i class="fas fa-envelope"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-zhihu"></i></a>
+            </div>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 首页Hero区 -->
+    <section class="hero" id="home">
+        <div class="orbit-container">
+            <div class="orbit orbit-1">
+                <div class="orbit-icon"><i class="fab fa-python"></i></div>
+            </div>
+            <div class="orbit orbit-2">
+                <div class="orbit-icon"><i class="fas fa-brain"></i></div>
+            </div>
+            <div class="orbit orbit-3">
+                <div class="orbit-icon"><i class="fas fa-database"></i></div>
+            </div>
+            <div class="orbit orbit-4">
+                <div class="orbit-icon"><i class="fas fa-chart-line"></i></div>
+            </div>
+            <div class="orbit orbit-5">
+                <div class="orbit-icon"><i class="fas fa-robot"></i></div>
+            </div>
+            <div class="orbit orbit-6">
+                <div class="orbit-icon"><i class="fas fa-code"></i></div>
+            </div>
+        </div>
+        
+        <div class="hero-card animate-fade-up">
+            <div class="avatar">
+                <div class="avatar-placeholder">李</div>
+            </div>
+            <h1 class="hero-title">
+                <span class="highlight">李妍越</span>
+            </h1>
+            <p class="hero-subtitle">AI工程师 · RAG架构师 · Agent开发者</p>
+            <div class="hero-buttons">
+                <a href="#works" class="btn btn-primary">查看作品</a>
+                <a href="#contact" class="btn btn-secondary">联系我</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我 -->
+    <section class="section about" id="about">
+        <div class="container">
+            <h2 class="section-title animate-fade-up">关于我</h2>
+            <div class="about-content">
+                <div class="about-card animate-fade-up">
+                    <div class="about-text">
+                        <p>我是一名对人工智能充满热情的AI工程师，目前就读于重庆移通学院自动化专业。连续3年专业排名年级前3%，专注于将大语言模型与传统机器学习算法相结合，解决实际业务问题。</p>
+                        <p>在RAG检索增强生成、Agent智能体开发、以及金融场景的ML建模方面有丰富的实战经验。我相信技术的价值在于落地应用，致力于构建可解释、高可用、高性能的AI系统。</p>
+                        <p>除了技术研究，我也热衷于开源社区贡献和技术分享，曾获国家省部级、院校级30+项奖励或荣誉称号。</p>
+                    </div>
+                    <div class="about-info">
+                        <div class="info-item">
+                            <span class="info-label">位置</span>
+                            <span class="info-value">中国 · 重庆</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">教育背景</span>
+                            <span class="info-value">重庆移通学院 · 自动化</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">在校时间</span>
+                            <span class="info-value">2023.09 - 2027.06</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">专业排名</span>
+                            <span class="info-value">连续3年前3%</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">荣誉奖项</span>
+                            <span class="info-value">30+项国家级/省部级</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">校园角色</span>
+                            <span class="info-value">班长 / 志愿支队负责人</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 技能与经历 -->
+    <section class="section skills" id="skills">
+        <div class="container">
+            <h2 class="section-title animate-fade-up">技能 & 经历</h2>
+            
+            <div class="skills-grid">
+                <div class="skill-card animate-fade-up">
+                    <h3 class="skill-category"><i class="fas fa-brain"></i> 大模型 & Agent 开发</h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span>Python 编程</span>
+                                <span>95%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="95%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span>LangGraph / LangChain</span>
+                                <span>92%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="92%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span>RAG 检索增强生成</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span>Prompt 工程 & Embedding</span>
+                                <span>93%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="93%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card animate-fade-up">
+                    <h3 class="skill-category"><i class="fas fa-chart-bar"></i> 机器学习 & 数据分析</h3>
+                    <div class="skill-items">
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span>Pandas / NumPy / Scikit-learn</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span>LightGBM / XGBoost</span>
+                                <span>88%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="88%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span>SHAP 可解释性分析</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span>K-Means / Apriori / ARIMA</span>
+                                <span>87%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-width="87%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card animate-fade-up">
+                    <h3 class="skill-category"><i class="fas fa-certificate"></i> 专业认证 & 技术栈</h3>
+                    <div class="skill-tags">
+                        <span class="tag">阿里云高级AI训练师</span>
+                        <span class="tag">阿里云RAG专项认证</span>
+                        <span class="tag">Datawhale LLM工程师</span>
+                        <span class="tag">Qwen-Agent</span>
+                        <span class="tag">DashScope API</span>
+                        <span class="tag">FastAPI / Flask</span>
+                        <span class="tag">ECharts / Matplotlib</span>
+                        <span class="tag">ChromaDB / PostgreSQL</span>
+                        <span class="tag">Gradio / Streamlit</span>
+                    </div>
+                </div>
+
+                <div class="skill-card experience-card animate-fade-up">
+                    <h3 class="skill-category"><i class="fas fa-trophy"></i> 荣誉 & 校园经历</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <h4>项目负责人 · 智能分诊系统</h4>
+                                <span class="timeline-date">2025 - 至今</span>
+                                <p>基于LangGraph构建多节点工作流，实现意图识别、工具调度、RAG检索增强生成的完整闭环。</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <h4>项目负责人 · 银行百万客群智能助手</h4>
+                                <span class="timeline-date">2025</span>
+                                <p>基于通义千问+ML算法构建客户价值挖掘体系，完成从数据采集到精准触达的全链路闭环。</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <h4>校志愿支队负责人</h4>
+                                <span class="timeline-date">2023 - 至今</span>
+                                <p>带领70+人团队开展活动100期，辐射5000+人次，斩获校级优秀志愿支队称号。</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <h4>主要荣誉奖项</h4>
+                                <span class="timeline-date">累计30+项</span>
+                                <p>全国数据分析大赛二等奖、三维数字化创新设计大赛省一、ISCC智能安全赛省二、三好学生、百名优秀志愿者等。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 作品展示 -->
+    <section class="section works" id="works">
+        <div class="container">
+            <h2 class="section-title animate-fade-up">作品展示</h2>
+            <div class="works-slider">
+                <div class="work-cards-wrapper">
+                    <div class="work-card animate-fade-up">
+                        <div class="work-image">
+                            <div class="work-placeholder" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <i class="fas fa-stethoscope"></i>
+                            </div>
+                        </div>
+                        <div class="work-info">
+                            <h3>基于LangGraph的智能分诊系统</h3>
+                            <p>面向医疗健康咨询场景的多节点工作流系统，基于LangGraph状态图框架构建，支持意图识别、动态路由、RAG检索增强生成，实现完整的闭环处理流程。</p>
+                            <div class="work-tech">
+                                <span>Python</span>
+                                <span>LangGraph</span>
+                                <span>ChromaDB</span>
+                                <span>FastAPI</span>
+                            </div>
+                            <a href="#" class="work-link">查看详情 →</a>
+                        </div>
+                    </div>
+
+                    <div class="work-card animate-fade-up">
+                        <div class="work-image">
+                            <div class="work-placeholder" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                <i class="fas fa-university"></i>
+                            </div>
+                        </div>
+                        <div class="work-info">
+                            <h3>银行百万客群智能助手</h3>
+                            <p>面向银行零售客户经营场景的AI运营系统，整合通义千问大模型+机器学习算法，实现客户价值预测、智能分群、关联挖掘、趋势预警及自然语言问答功能。</p>
+                            <div class="work-tech">
+                                <span>Python</span>
+                                <span>Qwen-Agent</span>
+                                <span>LightGBM</span>
+                                <span>Flask</span>
+                            </div>
+                            <a href="#" class="work-link">查看详情 →</a>
+                        </div>
+                    </div>
+
+                    <div class="work-card animate-fade-up">
+                        <div class="work-image">
+                            <div class="work-placeholder" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                        </div>
+                        <div class="work-info">
+                            <h3>AI智能问答助手</h3>
+                            <p>基于Qwen-Agent集成的通义千问大模型应用，具备自然语言转SQL能力，支持客户概况、模型分析、综合决策等30+问题的智能问答，提供WebUI交互界面。</p>
+                            <div class="work-tech">
+                                <span>Qwen-Agent</span>
+                                <span>DashScope</span>
+                                <span>Gradio</span>
+                                <span>Streamlit</span>
+                            </div>
+                            <a href="#" class="work-link">查看详情 →</a>
+                        </div>
+                    </div>
+
+                    <div class="work-card animate-fade-up">
+                        <div class="work-image">
+                            <div class="work-placeholder" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                        </div>
+                        <div class="work-info">
+                            <h3>客服RAG系统</h3>
+                            <p>基于检索增强生成(RAG)的智能客服系统，支持多格式文档解析、FAISS向量检索和LLM智能问答。自研文档切片算法，检索准确率提升80%，响应速度达到秒级。</p>
+                            <div class="work-tech">
+                                <span>Python</span>
+                                <span>FAISS</span>
+                                <span>Qwen-plus</span>
+                                <span>PyMuPDF</span>
+                            </div>
+                            <a href="#" class="work-link">查看详情 →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系方式 -->
+    <section class="section contact" id="contact">
+        <div class="container">
+            <h2 class="section-title animate-fade-up">联系我</h2>
+            <div class="contact-content animate-fade-up">
+                <div class="contact-info">
+                    <p>如果您对AI/ML项目合作、技术咨询或学术交流感兴趣，欢迎随时与我联系！</p>
+                    <div class="contact-methods">
+                        <a href="mailto:lider517@163.com" class="contact-method">
+                            <i class="fas fa-envelope"></i>
+                            <span>lider517@163.com</span>
+                        </a>
+                        <a href="https://github.com/Lider-is-here" class="contact-method">
+                            <i class="fab fa-github"></i>
+                            <span>github.com/Lider-is-here</span>
+                        </a>
+                        <a href="#" class="contact-method">
+                            <i class="fas fa-file-alt"></i>
+                            <span>下载完整简历</span>
+                        </a>
+                    </div>
+                </div>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <input type="text" placeholder="您的姓名" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="您的邮箱" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="留言内容（如项目合作意向、技术咨询等）" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-submit">发送消息</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2026 李妍越. All rights reserved.</p>
+                <p>用 ❤️ 和 AI 构建</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
