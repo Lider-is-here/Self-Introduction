@@ -131,6 +131,19 @@ body {
     transform: translateY(-2px);
 }
 
+.csdn-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6c757d;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.csdn-text:hover {
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
 .hamburger {
     display: none;
     flex-direction: column;
