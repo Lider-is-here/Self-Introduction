@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>纸飞机滚动交互特效</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .content h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #2563eb;
+        }
+
+        .content p {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .content section {
+            margin-bottom: 60px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .content section h2 {
+            color: #1e40af;
+            margin-bottom: 15px;
+        }
+
+        .placeholder {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .scroll-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>纸飞机滚动交互特效演示</h1>
+        <p>向下滚动页面，观察纸飞机的飞行效果。纸飞机会沿着随机曲线飞行，速度会根据你的滚动速度变化。</p>
+        
+        <section>
+            <h2>第一部分</h2>
+            <p>这是一个演示页面，用于展示纸飞机滚动交互特效。当你滚动页面时，纸飞机会沿着随机曲线飞行。</p>
+            <div class="placeholder">内容占位符</div>
+        </section>
+
+        <section>
+            <h2>第二部分</h2>
+            <p>纸飞机的飞行轨迹是随机生成的，每次刷新页面都会有所不同。飞机会有轻微的倾斜和摆动效果。</p>
+            <div class="placeholder">内容占位符</div>
+        </section>
+
+        <section>
+            <h2>第三部分</h2>
+            <p>当你向上滚动页面时，纸飞机会反向飞行。滚动速度越快，飞机飞行速度也越快。</p>
+            <div class="placeholder">内容占位符</div>
+        </section>
+
+        <section>
+            <h2>第四部分</h2>
+            <p>纸飞机是半透明的，不会遮挡页面内容。你可以通过调整参数来改变飞机的大小、飞行幅度等。</p>
+            <div class="placeholder">内容占位符</div>
+        </section>
+
+        <section>
+            <h2>第五部分</h2>
+            <p>这个特效兼容PC端和移动端，不会影响页面原有的滚动功能。</p>
+            <div class="placeholder">内容占位符</div>
+        </section>
+
+        <section>
+            <h2>第六部分</h2>
+            <p>当你停止滚动时，纸飞机会缓慢停止晃动。回到页面顶部时，纸飞机会回到初始位置。</p>
+            <div class="placeholder">内容占位符</div>
+        </section>
+
+        <section>
+            <h2>第七部分</h2>
+            <p>继续向下滚动查看更多效果...</p>
+            <div class="placeholder">内容占位符</div>
+        </section>
+
+        <section>
+            <h2>第八部分</h2>
+            <p>纸飞机的飞行轨迹是动态生成的，每次刷新页面都会有所不同。</p>
+            <div class="placeholder">内容占位符</div>
+        </section>
+
+        <section>
+            <h2>第九部分</h2>
+            <p>这个特效使用纯HTML、CSS和JavaScript实现，不依赖任何第三方库。</p>
+            <div class="placeholder">内容占位符</div>
+        </section>
+
+        <section>
+            <h2>第十部分</h2>
+            <p>感谢观看演示！向上滚动回到顶部，观察纸飞机的反向飞行效果。</p>
+            <div class="placeholder">内容占位符</div>
+        </section>
+    </div>
+
+    <div class="scroll-hint">↓ 向下滚动查看效果</div>
+
+    <script>
+        // 纸飞机滚动交互特效配置参数
+        const PAPER_PLANE_CONFIG = {
+            // 飞机大小（像素）
+            size: 40,
+            // 飞行幅度（左右偏移范围，像素）
+            flightAmplitude: 80,
+            // 上下起伏幅度（像素）
+            verticalAmplitude: 20,
+            // 基础飞行速度系数
+            speedMultiplier: 0.8,
+            // 飞机透明度（0-1）
+            opacity: 0.7,
+            // 飞机阴影颜色
+            shadowColor: 'rgba(0, 0, 0, 0.2)',
+            // 飞机阴影模糊度（像素）
+            shadowBlur: 10,
+            // 飞机阴影偏移（像素）
+            shadowOffset: 5,
+            // 摆动幅度（度）
+            wobbleAmplitude: 15,
+            // 摆动速度
+            wobbleSpeed: 0.05,
+            // 倾斜角度（度）
+            tiltAngle: 30,
+            // 飞机初始位置（百分比）
+            initialLeft: 10,
+            // 飞机层级
+            zIndex: 9999
+        };
+
+        class PaperPlane {
+            constructor(config) {
+                this.config = config;
+                this.element = null;
+                this.currentScrollY = 0;
+                this.targetScrollY = 0;
+                this.velocity = 0;
+                this.flightPath = [];
+                this.wobblePhase = 0;
+                this.isScrolling = false;
+                this.scrollTimeout = null;
+                this.animationFrame = null;
+                this.lastScrollTime = 0;
+                this.scrollVelocity = 0;
+                
+                this.init();
+            }
+
+            init() {
+                this.createPlane();
+                this.generateFlightPath();
+                this.bindEvents();
+                this.startAnimation();
+            }
+
+            createPlane() {
+                this.element = document.createElement('div');
+                this.element.className = 'paper-plane';
+                this.element.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 12L22 2L15 22L12 15L2 12Z" fill="white" stroke="rgba(0,0,0,0.1)" stroke-width="0.5"/>
+                    </svg>
+                `;
+                
+                this.element.style.cssText = `
+                    position: fixed;
+                    top: 100px;
+                    left: ${this.config.initialLeft}%;
+                    width: ${this.config.size}px;
+                    height: ${this.config.size}px;
+                    opacity: ${this.config.opacity};
+                    z-index: ${this.config.zIndex};
+                    pointer-events: none;
+                    filter: drop-shadow(${this.config.shadowOffset}px ${this.config.shadowOffset}px ${this.config.shadowBlur}px ${this.config.shadowColor});
+                    transition: transform 0.1s ease-out;
+                    will-change: transform;
+                `;
+                
+                document.body.appendChild(this.element);
+            }
+
+            generateFlightPath() {
+                this.flightPath = [];
+                const numPoints = 100;
+                
+                for (let i = 0; i <= numPoints; i++) {
+                    const progress = i / numPoints;
+                    const randomOffset = (Math.random() - 0.5) * this.config.flightAmplitude;
+                    const verticalOffset = Math.sin(progress * Math.PI * 4) * this.config.verticalAmplitude;
+                    
+                    this.flightPath.push({
+                        progress: progress,
+                        offsetX: randomOffset,
+                        offsetY: verticalOffset
+                    });
+                }
+            }
+
+            bindEvents() {
+                window.addEventListener('scroll', () => this.handleScroll());
+                window.addEventListener('resize', () => this.handleResize());
+            }
+
+            handleScroll() {
+                const now = Date.now();
+                const timeDelta = now - this.lastScrollTime;
+                this.lastScrollTime = now;
+                
+                const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollDelta = currentScroll - this.currentScrollY;
+                
+                if (timeDelta > 0) {
+                    this.scrollVelocity = scrollDelta / timeDelta;
+                }
+                
+                this.targetScrollY = currentScroll;
+                this.isScrolling = true;
+                
+                clearTimeout(this.scrollTimeout);
+                this.scrollTimeout = setTimeout(() => {
+                    this.isScrolling = false;
+                    this.scrollVelocity = 0;
+                }, 150);
+            }
+
+            handleResize() {
+                this.generateFlightPath();
+            }
+
+            getFlightPosition(scrollProgress) {
+                const clampedProgress = Math.max(0, Math.min(1, scrollProgress));
+                const totalPoints = this.flightPath.length;
+                const index = Math.floor(clampedProgress * (totalPoints - 1));
+                const nextIndex = Math.min(index + 1, totalPoints - 1);
+                const localProgress = (clampedProgress * (totalPoints - 1)) - index;
+                
+                const currentPoint = this.flightPath[index];
+                const nextPoint = this.flightPath[nextIndex];
+                
+                const offsetX = currentPoint.offsetX + (nextPoint.offsetX - currentPoint.offsetX) * localProgress;
+                const offsetY = currentPoint.offsetY + (nextPoint.offsetY - currentPoint.offsetY) * localProgress;
+                
+                return { offsetX, offsetY };
+            }
+
+            startAnimation() {
+                const animate = () => {
+                    this.updatePlane();
+                    this.animationFrame = requestAnimationFrame(animate);
+                };
+                animate();
+            }
+
+            updatePlane() {
+                const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollProgress = maxScroll > 0 ? this.targetScrollY / maxScroll : 0;
+                
+                const { offsetX, offsetY } = this.getFlightPosition(scrollProgress);
+                
+                this.wobblePhase += this.config.wobbleSpeed;
+                const wobble = Math.sin(this.wobblePhase) * this.config.wobbleAmplitude;
+                
+                const direction = this.scrollVelocity >= 0 ? 1 : -1;
+                const tilt = this.config.tiltAngle * direction;
+                const totalRotation = tilt + wobble;
+                
+                const speedFactor = Math.min(Math.abs(this.scrollVelocity) * this.config.speedMultiplier, 2);
+                const finalOpacity = this.config.opacity * (1 - speedFactor * 0.2);
+                
+                const baseLeft = window.innerWidth * (this.config.initialLeft / 100);
+                const finalLeft = baseLeft + offsetX;
+                const finalTop = 100 + offsetY;
+                
+                this.element.style.left = `${finalLeft}px`;
+                this.element.style.top = `${finalTop}px`;
+                this.element.style.transform = `rotate(${totalRotation}deg)`;
+                this.element.style.opacity = finalOpacity;
+                
+                this.currentScrollY = this.targetScrollY;
+            }
+        }
+
+        // 初始化纸飞机
+        document.addEventListener('DOMContentLoaded', () => {
+            const paperPlane = new PaperPlane(PAPER_PLANE_CONFIG);
+            
+            // 隐藏滚动提示
+            setTimeout(() => {
+                const hint = document.querySelector('.scroll-hint');
+                if (hint) {
+                    hint.style.transition = 'opacity 0.5s';
+                    hint.style.opacity = '0';
+                    setTimeout(() => hint.remove(), 500);
+                }
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

@@ -161,11 +161,11 @@
                 </div>
 
                 <div class="skill-card animate-fade-up">
-                    <h3 class="skill-category"><i class="fas fa-chart-bar"></i> 机器学习 & 数据分析</h3>
+                    <h3 class="skill-category"><i class="fas fa-chart-line"></i> 数据分析</h3>
                     <div class="skill-items">
                         <div class="skill-item">
                             <div class="skill-header">
-                                <span>Pandas / NumPy / Scikit-learn</span>
+                                <span>Pandas / NumPy</span>
                                 <span>90%</span>
                             </div>
                             <div class="skill-bar">
@@ -174,7 +174,7 @@
                         </div>
                         <div class="skill-item">
                             <div class="skill-header">
-                                <span>LightGBM / XGBoost</span>
+                                <span>Scikit-learn</span>
                                 <span>88%</span>
                             </div>
                             <div class="skill-bar">
@@ -183,20 +183,11 @@
                         </div>
                         <div class="skill-item">
                             <div class="skill-header">
-                                <span>SHAP 可解释性分析</span>
+                                <span>ECharts / Matplotlib</span>
                                 <span>85%</span>
                             </div>
                             <div class="skill-bar">
                                 <div class="skill-progress" data-width="85%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="skill-header">
-                                <span>K-Means / Apriori / ARIMA</span>
-                                <span>87%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-progress" data-width="87%"></div>
                             </div>
                         </div>
                     </div>
@@ -393,5 +384,195 @@
     </footer>
 
     <script src="script.js"></script>
+    
+    <!-- 纸飞机滚动交互特效 -->
+    <script>
+    // 纸飞机滚动交互特效配置参数
+    const PAPER_PLANE_CONFIG = {
+        // 飞机大小（像素）
+        size: 35,
+        // 飞行幅度（左右偏移范围，像素）
+        flightAmplitude: 60,
+        // 上下起伏幅度（像素）
+        verticalAmplitude: 15,
+        // 基础飞行速度系数
+        speedMultiplier: 0.8,
+        // 飞机透明度（0-1）
+        opacity: 0.6,
+        // 飞机阴影颜色
+        shadowColor: 'rgba(0, 0, 0, 0.15)',
+        // 飞机阴影模糊度（像素）
+        shadowBlur: 8,
+        // 飞机阴影偏移（像素）
+        shadowOffset: 3,
+        // 摆动幅度（度）
+        wobbleAmplitude: 12,
+        // 摆动速度
+        wobbleSpeed: 0.04,
+        // 倾斜角度（度）
+        tiltAngle: 25,
+        // 飞机初始位置（百分比）
+        initialLeft: 8,
+        // 飞机层级
+        zIndex: 9999
+    };
+
+    class PaperPlane {
+        constructor(config) {
+            this.config = config;
+            this.element = null;
+            this.currentScrollY = 0;
+            this.targetScrollY = 0;
+            this.velocity = 0;
+            this.flightPath = [];
+            this.wobblePhase = 0;
+            this.isScrolling = false;
+            this.scrollTimeout = null;
+            this.animationFrame = null;
+            this.lastScrollTime = 0;
+            this.scrollVelocity = 0;
+            
+            this.init();
+        }
+
+        init() {
+            this.createPlane();
+            this.generateFlightPath();
+            this.bindEvents();
+            this.startAnimation();
+        }
+
+        createPlane() {
+            this.element = document.createElement('div');
+            this.element.className = 'paper-plane';
+            this.element.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 12L22 2L15 22L12 15L2 12Z" fill="white" stroke="rgba(0,0,0,0.1)" stroke-width="0.5"/>
+                </svg>
+            `;
+            
+            this.element.style.cssText = `
+                position: fixed;
+                top: 100px;
+                left: ${this.config.initialLeft}%;
+                width: ${this.config.size}px;
+                height: ${this.config.size}px;
+                opacity: ${this.config.opacity};
+                z-index: ${this.config.zIndex};
+                pointer-events: none;
+                filter: drop-shadow(${this.config.shadowOffset}px ${this.config.shadowOffset}px ${this.config.shadowBlur}px ${this.config.shadowColor});
+                transition: transform 0.1s ease-out;
+                will-change: transform;
+            `;
+            
+            document.body.appendChild(this.element);
+        }
+
+        generateFlightPath() {
+            this.flightPath = [];
+            const numPoints = 100;
+            
+            for (let i = 0; i <= numPoints; i++) {
+                const progress = i / numPoints;
+                const randomOffset = (Math.random() - 0.5) * this.config.flightAmplitude;
+                const verticalOffset = Math.sin(progress * Math.PI * 4) * this.config.verticalAmplitude;
+                
+                this.flightPath.push({
+                    progress: progress,
+                    offsetX: randomOffset,
+                    offsetY: verticalOffset
+                });
+            }
+        }
+
+        bindEvents() {
+            window.addEventListener('scroll', () => this.handleScroll());
+            window.addEventListener('resize', () => this.handleResize());
+        }
+
+        handleScroll() {
+            const now = Date.now();
+            const timeDelta = now - this.lastScrollTime;
+            this.lastScrollTime = now;
+            
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollDelta = currentScroll - this.currentScrollY;
+            
+            if (timeDelta > 0) {
+                this.scrollVelocity = scrollDelta / timeDelta;
+            }
+            
+            this.targetScrollY = currentScroll;
+            this.isScrolling = true;
+            
+            clearTimeout(this.scrollTimeout);
+            this.scrollTimeout = setTimeout(() => {
+                this.isScrolling = false;
+                this.scrollVelocity = 0;
+            }, 150);
+        }
+
+        handleResize() {
+            this.generateFlightPath();
+        }
+
+        getFlightPosition(scrollProgress) {
+            const clampedProgress = Math.max(0, Math.min(1, scrollProgress));
+            const totalPoints = this.flightPath.length;
+            const index = Math.floor(clampedProgress * (totalPoints - 1));
+            const nextIndex = Math.min(index + 1, totalPoints - 1);
+            const localProgress = (clampedProgress * (totalPoints - 1)) - index;
+            
+            const currentPoint = this.flightPath[index];
+            const nextPoint = this.flightPath[nextIndex];
+            
+            const offsetX = currentPoint.offsetX + (nextPoint.offsetX - currentPoint.offsetX) * localProgress;
+            const offsetY = currentPoint.offsetY + (nextPoint.offsetY - currentPoint.offsetY) * localProgress;
+            
+            return { offsetX, offsetY };
+        }
+
+        startAnimation() {
+            const animate = () => {
+                this.updatePlane();
+                this.animationFrame = requestAnimationFrame(animate);
+            };
+            animate();
+        }
+
+        updatePlane() {
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollProgress = maxScroll > 0 ? this.targetScrollY / maxScroll : 0;
+            
+            const { offsetX, offsetY } = this.getFlightPosition(scrollProgress);
+            
+            this.wobblePhase += this.config.wobbleSpeed;
+            const wobble = Math.sin(this.wobblePhase) * this.config.wobbleAmplitude;
+            
+            const direction = this.scrollVelocity >= 0 ? 1 : -1;
+            const tilt = this.config.tiltAngle * direction;
+            const totalRotation = tilt + wobble;
+            
+            const speedFactor = Math.min(Math.abs(this.scrollVelocity) * this.config.speedMultiplier, 2);
+            const finalOpacity = this.config.opacity * (1 - speedFactor * 0.2);
+            
+            const baseLeft = window.innerWidth * (this.config.initialLeft / 100);
+            const finalLeft = baseLeft + offsetX;
+            const finalTop = 100 + offsetY;
+            
+            this.element.style.left = `${finalLeft}px`;
+            this.element.style.top = `${finalTop}px`;
+            this.element.style.transform = `rotate(${totalRotation}deg)`;
+            this.element.style.opacity = finalOpacity;
+            
+            this.currentScrollY = this.targetScrollY;
+        }
+    }
+
+    // 初始化纸飞机
+    document.addEventListener('DOMContentLoaded', () => {
+        const paperPlane = new PaperPlane(PAPER_PLANE_CONFIG);
+    });
+    </script>
 </body>
 </html>
