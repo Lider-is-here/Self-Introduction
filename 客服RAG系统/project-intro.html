@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>客服RAG系统 | 项目介绍</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+      scroll-behavior: smooth;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #e53935 0%, #ef5350 50%, #ff7043 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .bg-red-gradient {
+      background: linear-gradient(135deg, #e53935 0%, #ef5350 50%, #ff7043 100%);
+    }
+    
+    .nav-link {
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -4px;
+      left: 0;
+      background: linear-gradient(135deg, #e53935, #ef5350);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    .feature-card {
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(229, 57, 53, 0.15);
+    }
+    
+    .tech-tag {
+      background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+      color: #c62828;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .tech-tag:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(229, 57, 53, 0.2);
+    }
+    
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+    
+    .animate-pulse-glow {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(229, 57, 53, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(229, 57, 53, 0.5); }
+    }
+    
+    .code-block {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+    
+    .code-keyword { color: #c678dd; }
+    .code-string { color: #98c379; }
+    .code-comment { color: #5c6370; }
+    .code-function { color: #61afef; }
+    .code-variable { color: #e5c07b; }
+    
+    .flowchart-node {
+      fill: white;
+      stroke: #e53935;
+      stroke-width: 2;
+      rx: 8;
+      ry: 8;
+    }
+    
+    .flowchart-arrow {
+      stroke: #e53935;
+      stroke-width: 2;
+      fill: none;
+      marker-end: url(#arrowhead);
+    }
+    
+    .flowchart-text {
+      fill: #1e293b;
+      font-size: 13px;
+      font-weight: 500;
+      text-anchor: middle;
+    }
+    
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 72px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(229, 57, 53, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      z-index: 200;
+      font-size: 14px;
+      box-shadow: 0 2px 20px rgba(229, 57, 53, 0.06);
+      transition: all 0.3s ease;
+    }
+    
+    .top-bar .center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .top-bar.scrolled {
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 4px 30px rgba(229, 57, 53, 0.1);
+    }
+    
+    .top-bar .left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .top-bar .name {
+      font-weight: 700;
+      color: #1f2937;
+      font-size: 16px;
+      letter-spacing: 0.02em;
+    }
+    
+    .top-bar .name span {
+      color: #FF9F43;
+      font-weight: 700;
+      margin-left: 6px;
+    }
+    
+    .top-bar .project-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 17px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    
+    .top-bar .project-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #e53935, #ef5350);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 18px;
+      box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+    }
+    
+    .top-bar .divider {
+      width: 1px;
+      height: 28px;
+      background: rgba(0, 0, 0, 0.08);
+    }
+    
+    .top-bar .right {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    
+    .top-bar .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+    
+    .top-bar .nav-links a {
+      color: #6b7280;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 8px 0;
+    }
+    
+    .top-bar .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(135deg, #e53935, #ef5350);
+      transition: width 0.3s ease;
+    }
+    
+    .top-bar .nav-links a:hover {
+      color: #e53935;
+    }
+    
+    .top-bar .nav-links a:hover::after {
+      width: 100%;
+    }
+    
+    .top-bar .back-link {
+      color: #6b7280;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: rgba(229, 57, 53, 0.05);
+      border: 1px solid rgba(229, 57, 53, 0.1);
+    }
+    
+    .top-bar .back-link:hover {
+      color: #fff;
+      background: linear-gradient(135deg, #e53935, #ef5350);
+      border-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-red-50 via-white to-orange-50 min-h-screen pt-20">
+
+  <div class="top-bar">
+    <div class="left">
+      <div class="name">李妍越 <span>Portfolio</span></div>
+      <div class="divider"></div>
+      <div class="project-title">
+        <div class="project-icon"><i class="fa fa-comments-o"></i></div>
+        客服RAG系统
+      </div>
+    </div>
+    <div class="center">
+      <div class="nav-links">
+        <a href="#hero">首页</a>
+        <a href="#features">核心功能</a>
+        <a href="#architecture">技术架构</a>
+        <a href="#interface">界面展示</a>
+        <a href="#tech-stack">技术栈</a>
+      </div>
+    </div>
+    <div class="right">
+      <a href="../index.html#works" class="back-link">← 返回作品列表</a>
+    </div>
+  </div>
+
+  <section id="hero" class="pt-24 pb-16 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col lg:flex-row items-center gap-12">
+        <div class="flex-1 text-center lg:text-left">
+          <div class="inline-flex items-center px-4 py-2 bg-red-100 rounded-full mb-6">
+            <i class="fa fa-bot text-red-600 mr-2"></i>
+            <span class="text-red-700 font-medium text-sm">AI驱动智能客服系统</span>
+          </div>
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-6 leading-tight">
+            基于<span class="gradient-text">大语言模型</span>的
+            <br>智能客服RAG系统
+          </h1>
+          <p class="text-lg text-gray-600 mb-8 max-w-xl mx-auto lg:mx-0">
+            融合检索增强生成(RAG)技术，实现精准的文档问答服务，为学院提供智能化的客服解决方案
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <a href="#features" class="px-8 py-3 bg-red-gradient text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+              <i class="fa fa-arrow-right mr-2"></i>了解更多
+            </a>
+            <a href="#architecture" class="px-8 py-3 bg-white text-red-600 border-2 border-red-200 rounded-xl font-semibold hover:border-red-400 hover:bg-red-50 transition-all">
+              <i class="fa fa-code-fork mr-2"></i>技术架构
+            </a>
+          </div>
+        </div>
+        <div class="flex-1 relative">
+          <div class="relative w-full max-w-md mx-auto">
+            <div class="absolute inset-0 bg-red-200 rounded-3xl blur-3xl opacity-30 animate-pulse-glow"></div>
+            <div class="relative bg-white rounded-2xl shadow-2xl p-6 border border-red-100">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-red-gradient rounded-full flex items-center justify-center">
+                  <i class="fa fa-bot text-white"></i>
+                </div>
+                <div>
+                  <div class="font-semibold text-gray-800">智能客服助手</div>
+                  <div class="text-sm text-gray-500">双体软件精英产业学院</div>
+                </div>
+              </div>
+              <div class="space-y-4">
+                <div class="bg-gray-100 rounded-xl p-3 ml-auto max-w-xs">
+                  <div class="text-gray-800 text-sm">学院有哪些专业？</div>
+                </div>
+                <div class="bg-red-50 rounded-xl p-3 mr-auto max-w-xs border border-red-100">
+                  <div class="text-gray-800 text-sm">您好！学院开设有软件工程、人工智能、物联网等多个热门专业...</div>
+                </div>
+                <div class="bg-gray-100 rounded-xl p-3 ml-auto max-w-xs">
+                  <div class="text-gray-800 text-sm">学费和奖助学金政策是怎样的？</div>
+                </div>
+              </div>
+              <div class="mt-4 flex items-center gap-2 bg-gray-50 rounded-full px-4 py-2">
+                <input type="text" placeholder="输入您的问题..." class="flex-1 bg-transparent outline-none text-sm">
+                <button class="w-8 h-8 bg-red-gradient rounded-full flex items-center justify-center text-white">
+                  <i class="fa fa-paper-plane-o"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="py-16 px-4 bg-white">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">核心功能</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">基于RAG技术构建的智能客服系统，支持多文档导入、智能问答、知识管理等核心能力</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="feature-card bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl p-6 border border-red-100">
+          <div class="w-14 h-14 bg-red-gradient rounded-xl flex items-center justify-center mb-4 shadow-lg">
+            <i class="fa fa-database text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-3">知识库管理</h3>
+          <p class="text-gray-600 text-sm mb-4">支持Word、PDF等多种文档格式的批量导入，自动提取知识切片构建向量索引</p>
+          <ul class="text-sm text-gray-500 space-y-2">
+            <li><i class="fa fa-check text-red-500 mr-2"></i>多格式文档支持</li>
+            <li><i class="fa fa-check text-red-500 mr-2"></i>智能切片提取</li>
+            <li><i class="fa fa-check text-red-500 mr-2"></i>向量数据库存储</li>
+          </ul>
+        </div>
+        
+        <div class="feature-card bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl p-6 border border-orange-100">
+          <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+            <i class="fa fa-search text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-3">智能问答检索</h3>
+          <p class="text-gray-600 text-sm mb-4">基于向量检索技术，精准匹配用户问题与知识库内容，返回相关度最高的答案</p>
+          <ul class="text-sm text-gray-500 space-y-2">
+            <li><i class="fa fa-check text-orange-500 mr-2"></i>语义相似度检索</li>
+            <li><i class="fa fa-check text-orange-500 mr-2"></i>多结果并行处理</li>
+            <li><i class="fa fa-check text-orange-500 mr-2"></i>相关图片匹配</li>
+          </ul>
+        </div>
+        
+        <div class="feature-card bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl p-6 border border-yellow-100">
+          <div class="w-14 h-14 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+            <i class="fa fa-comment-o text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-3">对话式交互</h3>
+          <p class="text-gray-600 text-sm mb-4">支持多轮对话交互，上下文感知，提供自然流畅的问答体验</p>
+          <ul class="text-sm text-gray-500 space-y-2">
+            <li><i class="fa fa-check text-yellow-600 mr-2"></i>多轮对话支持</li>
+            <li><i class="fa fa-check text-yellow-600 mr-2"></i>上下文记忆</li>
+            <li><i class="fa fa-check text-yellow-600 mr-2"></i>即时回复生成</li>
+          </ul>
+        </div>
+        
+        <div class="feature-card bg-gradient-to-br from-amber-50 to-red-50 rounded-2xl p-6 border border-amber-100">
+          <div class="w-14 h-14 bg-gradient-to-br from-amber-500 to-red-500 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+            <i class="fa fa-bar-chart text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-3">数据统计分析</h3>
+          <p class="text-gray-600 text-sm mb-4">实时统计文档数量、知识切片数、图片资源等关键指标，便于系统运维</p>
+          <ul class="text-sm text-gray-500 space-y-2">
+            <li><i class="fa fa-check text-amber-600 mr-2"></i>实时数据统计</li>
+            <li><i class="fa fa-check text-amber-600 mr-2"></i>可视化展示</li>
+            <li><i class="fa fa-check text-amber-600 mr-2"></i>状态监控</li>
+          </ul>
+        </div>
+        
+        <div class="feature-card bg-gradient-to-br from-red-50 to-pink-50 rounded-2xl p-6 border border-red-100">
+          <div class="w-14 h-14 bg-gradient-to-br from-red-500 to-pink-500 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+            <i class="fa fa-lightbulb-o text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-3">相似问题推荐</h3>
+          <p class="text-gray-600 text-sm mb-4">基于历史问答数据，智能推荐相似问题，提升用户查询效率</p>
+          <ul class="text-sm text-gray-500 space-y-2">
+            <li><i class="fa fa-check text-red-500 mr-2"></i>热门问题推荐</li>
+            <li><i class="fa fa-check text-red-500 mr-2"></i>快捷问答入口</li>
+            <li><i class="fa fa-check text-red-500 mr-2"></i>知识关联</li>
+          </ul>
+        </div>
+        
+        <div class="feature-card bg-gradient-to-br from-pink-50 to-red-50 rounded-2xl p-6 border border-pink-100">
+          <div class="w-14 h-14 bg-gradient-to-br from-pink-500 to-red-500 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+            <i class="fa fa-cog text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-3">系统配置管理</h3>
+          <p class="text-gray-600 text-sm mb-4">支持知识库的加载、清空、重建等操作，灵活管理知识体系</p>
+          <ul class="text-sm text-gray-500 space-y-2">
+            <li><i class="fa fa-check text-pink-500 mr-2"></i>一键加载知识库</li>
+            <li><i class="fa fa-check text-pink-500 mr-2"></i>清空重建索引</li>
+            <li><i class="fa fa-check text-pink-500 mr-2"></i>知识源引用显示</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="architecture" class="py-16 px-4 bg-gray-50">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">技术架构</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">采用RAG检索增强生成架构，结合向量数据库实现精准知识检索与智能问答</p>
+      </div>
+      
+      <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+        <div class="flex flex-col lg:flex-row items-center gap-8">
+          <div class="flex-1">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">RAG工作流程</h3>
+            <div class="space-y-4">
+              <div class="flex items-center gap-4 p-4 bg-red-50 rounded-xl">
+                <div class="w-12 h-12 bg-red-gradient rounded-full flex items-center justify-center flex-shrink-0">
+                  <span class="text-white font-bold">1</span>
+                </div>
+                <div>
+                  <div class="font-semibold text-gray-800">文档导入</div>
+                  <div class="text-sm text-gray-600">用户上传Word、PDF等格式文档，系统自动解析提取内容</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 p-4 bg-orange-50 rounded-xl">
+                <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span class="text-white font-bold">2</span>
+                </div>
+                <div>
+                  <div class="font-semibold text-gray-800">知识切片</div>
+                  <div class="text-sm text-gray-600">将文档内容切分为知识单元，提取文本和图片信息</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 p-4 bg-yellow-50 rounded-xl">
+                <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span class="text-white font-bold">3</span>
+                </div>
+                <div>
+                  <div class="font-semibold text-gray-800">向量索引</div>
+                  <div class="text-sm text-gray-600">使用Embedding模型将文本转换为向量，构建向量数据库索引</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 p-4 bg-amber-50 rounded-xl">
+                <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-red-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span class="text-white font-bold">4</span>
+                </div>
+                <div>
+                  <div class="font-semibold text-gray-800">语义检索</div>
+                  <div class="text-sm text-gray-600">用户提问时，将问题向量化后与知识库进行相似度匹配</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 p-4 bg-red-50 rounded-xl">
+                <div class="w-12 h-12 bg-red-gradient rounded-full flex items-center justify-center flex-shrink-0">
+                  <span class="text-white font-bold">5</span>
+                </div>
+                <div>
+                  <div class="font-semibold text-gray-800">答案生成</div>
+                  <div class="text-sm text-gray-600">将检索到的相关知识作为上下文，调用LLM生成精准回答</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex-1">
+            <svg viewBox="0 0 300 400" class="w-full h-auto">
+              <defs>
+                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#e53935"/>
+                </marker>
+              </defs>
+              
+              <rect class="flowchart-node" x="80" y="20" width="140" height="40"/>
+              <text class="flowchart-text" x="150" y="45">文档导入</text>
+              
+              <path class="flowchart-arrow" d="M 150 60 L 150 90"/>
+              
+              <rect class="flowchart-node" x="80" y="95" width="140" height="40"/>
+              <text class="flowchart-text" x="150" y="120">知识切片</text>
+              
+              <path class="flowchart-arrow" d="M 150 135 L 150 165"/>
+              
+              <rect class="flowchart-node" x="80" y="170" width="140" height="40"/>
+              <text class="flowchart-text" x="150" y="195">向量索引</text>
+              
+              <rect class="flowchart-node" x="50" y="240" width="80" height="50"/>
+              <text class="flowchart-text" x="90" y="268">用户提问</text>
+              
+              <path class="flowchart-arrow" d="M 150 210 L 150 240"/>
+              <path class="flowchart-arrow" d="M 130 265 L 150 265"/>
+              
+              <rect class="flowchart-node" x="150" y="240" width="100" height="50"/>
+              <text class="flowchart-text" x="200" y="268">语义检索</text>
+              
+              <path class="flowchart-arrow" d="M 200 290 L 200 320"/>
+              
+              <rect class="flowchart-node" x="120" y="325" width="160" height="40"/>
+              <text class="flowchart-text" x="200" y="350">答案生成</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="interface" class="py-16 px-4 bg-white">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">界面展示</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">豆包风格的现代化界面设计，左侧导航、中间聊天区域、右侧推荐面板</p>
+      </div>
+      
+      <div class="grid lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 bg-gray-100 rounded-2xl p-4">
+          <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="flex items-center justify-between px-4 py-3 bg-gray-50 border-b">
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                <div class="w-3 h-3 rounded-full bg-green-400"></div>
+              </div>
+              <span class="text-sm text-gray-500">客服RAG系统 - 对话页面</span>
+            </div>
+            <div class="p-4">
+              <div class="flex gap-3 mb-4">
+                <div class="w-8 h-8 bg-red-gradient rounded-full flex items-center justify-center text-white text-sm">👤</div>
+                <div class="bg-red-500 text-white px-4 py-2 rounded-xl rounded-br-none">学院有哪些专业？</div>
+              </div>
+              <div class="flex gap-3">
+                <div class="w-8 h-8 bg-gradient-to-br from-red-500 to-orange-500 rounded-full flex items-center justify-center text-white text-sm">🤖</div>
+                <div class="bg-gray-100 text-gray-800 px-4 py-2 rounded-xl rounded-bl-none">
+                  您好！学院开设有以下专业：<br>
+                  • 软件工程<br>
+                  • 人工智能<br>
+                  • 物联网工程<br>
+                  • 数据科学与大数据技术
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="space-y-4">
+          <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="flex items-center justify-between px-4 py-3 bg-gray-50 border-b">
+              <span class="text-sm text-gray-500">知识库管理</span>
+            </div>
+            <div class="p-4">
+              <div class="bg-green-50 border border-green-200 rounded-lg p-3 mb-3">
+                <div class="font-semibold text-green-700">✅ 知识库已构建</div>
+                <div class="text-sm text-green-600">共收录 128 条知识切片</div>
+              </div>
+              <div class="flex gap-2">
+                <button class="flex-1 py-2 bg-gray-100 rounded-lg text-sm font-medium hover:bg-gray-200">📂 加载</button>
+                <button class="flex-1 py-2 bg-gray-100 rounded-lg text-sm font-medium hover:bg-gray-200">🗑️ 清空</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="flex items-center justify-between px-4 py-3 bg-gray-50 border-b">
+              <span class="text-sm text-gray-500">数据统计</span>
+            </div>
+            <div class="p-4">
+              <div class="grid grid-cols-3 gap-2">
+                <div class="text-center">
+                  <div class="text-xl font-bold text-red-600">12</div>
+                  <div class="text-xs text-gray-500">文档</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-xl font-bold text-red-600">128</div>
+                  <div class="text-xs text-gray-500">切片</div>
+                </div>
+                <div class="text-center">
+                  <div class="text-xl font-bold text-red-600">24</div>
+                  <div class="text-xs text-gray-500">图片</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tech-stack" class="py-16 px-4 bg-gray-50">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">技术栈</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">采用现代化技术栈，构建高性能、可扩展的智能客服系统</p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow">
+          <div class="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <i class="fa fa-python text-blue-600 text-3xl"></i>
+          </div>
+          <h3 class="font-bold text-gray-800 mb-2">Python</h3>
+          <p class="text-sm text-gray-600">核心开发语言</p>
+        </div>
+        
+        <div class="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow">
+          <div class="w-16 h-16 bg-orange-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <i class="fa fa-server text-orange-600 text-3xl"></i>
+          </div>
+          <h3 class="font-bold text-gray-800 mb-2">Gradio</h3>
+          <p class="text-sm text-gray-600">Web界面框架</p>
+        </div>
+        
+        <div class="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow">
+          <div class="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <i class="fa fa-database text-purple-600 text-3xl"></i>
+          </div>
+          <h3 class="font-bold text-gray-800 mb-2">ChromaDB</h3>
+          <p class="text-sm text-gray-600">向量数据库</p>
+        </div>
+        
+        <div class="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-shadow">
+          <div class="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <i class="fa fa-brain text-green-600 text-3xl"></i>
+          </div>
+          <h3 class="font-bold text-gray-800 mb-2">LLM</h3>
+          <p class="text-sm text-gray-600">大语言模型</p>
+        </div>
+      </div>
+      
+      <div class="mt-10 flex flex-wrap justify-center gap-3">
+        <span class="tech-tag">Embedding</span>
+        <span class="tech-tag">向量检索</span>
+        <span class="tech-tag">语义相似度</span>
+        <span class="tech-tag">知识图谱</span>
+        <span class="tech-tag">多轮对话</span>
+        <span class="tech-tag">上下文感知</span>
+        <span class="tech-tag">文档解析</span>
+        <span class="tech-tag">批量处理</span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-8 px-4 bg-gray-800">
+    <div class="max-w-7xl mx-auto text-center">
+      <div class="flex items-center justify-center gap-3 mb-4">
+        <div class="w-8 h-8 bg-red-gradient rounded-lg flex items-center justify-center">
+          <i class="fa fa-comments-o text-white"></i>
+        </div>
+        <span class="text-white font-bold">客服RAG系统</span>
+      </div>
+      <p class="text-gray-400 text-sm">基于大语言模型的智能客服解决方案 | 双体软件精英产业学院</p>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    const topBar = document.querySelector('.top-bar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        topBar.classList.add('scrolled');
+      } else {
+        topBar.classList.remove('scrolled');
+      }
+    });
+  </script>
+</body>
+</html>

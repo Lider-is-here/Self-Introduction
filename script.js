@@ -4,11 +4,186 @@ document.addEventListener('DOMContentLoaded', function() {
     const navMenu = document.getElementById('navMenu');
     const navLinks = document.querySelectorAll('.nav-link');
     const heroCard = document.querySelector('.hero-card');
-    const skillProgressBars = document.querySelectorAll('.skill-progress');
     const animateElements = document.querySelectorAll('.animate-fade-up');
     const contactForm = document.getElementById('contactForm');
+    const blurCircle = document.getElementById('blurCircle');
 
     let lastScrollY = window.scrollY;
+
+    // ==================== 双层缓动鼠标光标 ====================
+    const cursor = {
+        dot: document.querySelector('.cursor-dot'),
+        ring: document.querySelector('.cursor-ring'),
+        container: document.querySelector('.custom-cursor'),
+        mouseX: 0,
+        mouseY: 0,
+        ringX: 0,
+        ringY: 0,
+        isHovering: false,
+        isClicking: false
+    };
+
+    // 检测设备是否支持hover
+    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    
+    if (!isTouchDevice && cursor.container) {
+        // 不隐藏默认光标，让小圆圈跟随
+        cursor.container.style.display = 'block';
+
+        // 内层小圆点精确跟随（使用transform优化性能）
+        document.addEventListener('mousemove', (e) => {
+            cursor.mouseX = e.clientX;
+            cursor.mouseY = e.clientY;
+            cursor.dot.style.transform = `translate(${cursor.mouseX}px, ${cursor.mouseY}px) translate(-50%, -50%)`;
+        });
+
+        // 外层圆环缓动跟随（使用transform优化性能）
+        function animateRing() {
+            const lerpFactor = 0.15; // 缓动系数，越小越慢
+            cursor.ringX += (cursor.mouseX - cursor.ringX) * lerpFactor;
+            cursor.ringY += (cursor.mouseY - cursor.ringY) * lerpFactor;
+            
+            cursor.ring.style.transform = `translate(${cursor.ringX}px, ${cursor.ringY}px) translate(-50%, -50%)`;
+            
+            requestAnimationFrame(animateRing);
+        }
+        animateRing();
+
+        // 交互元素检测
+        const interactiveElements = document.querySelectorAll('a, button, .skill-card, .experience-item, .work-card, .social-icons a');
+        
+        interactiveElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                cursor.isHovering = true;
+                cursor.ring.classList.add('hover');
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                cursor.isHovering = false;
+                cursor.ring.classList.remove('hover');
+            });
+        });
+
+        // 点击效果
+        document.addEventListener('mousedown', () => {
+            cursor.isClicking = true;
+            cursor.dot.classList.add('click');
+            cursor.ring.classList.add('click');
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursor.isClicking = false;
+            cursor.dot.classList.remove('click');
+            cursor.ring.classList.remove('click');
+        });
+
+        // ==================== 磁吸悬浮效果 ====================
+        const magneticElements = document.querySelectorAll('.btn, .skill-card, .experience-item, .work-card');
+        
+        magneticElements.forEach(element => {
+            element.classList.add('magnetic-element');
+            
+            element.addEventListener('mousemove', (e) => {
+                const rect = element.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                const strength = 0.1; // 磁吸强度（作品区域减弱）
+                element.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                element.style.transform = 'translate(0, 0)';
+            });
+        });
+    }
+
+    // ==================== 页面滚动入场动画 ====================
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
+    const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                // 动画完成后停止观察
+                scrollObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // 为所有需要动画的元素添加观察者
+    const animatedElements = document.querySelectorAll('.animate-on-scroll');
+    animatedElements.forEach(element => {
+        scrollObserver.observe(element);
+    });
+
+    // ==================== 数字滚动增长动画 ====================
+    const numberCounterOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5
+    };
+
+    const numberObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.classList.contains('counter-animated')) {
+                const target = entry.target;
+                const finalNumber = target.dataset.number;
+                target.classList.add('counter-animated', 'counting');
+                
+                animateNumber(target, 0, parseInt(finalNumber), 2000);
+                numberObserver.unobserve(target);
+            }
+        });
+    }, numberCounterOptions);
+
+    // 查找所有带数字的元素并添加观察者
+    const infoValues = document.querySelectorAll('.info-value');
+    infoValues.forEach(element => {
+        const text = element.textContent;
+        const numberMatch = text.match(/^(\d+)$/); // 只匹配纯数字
+        
+        if (numberMatch) {
+            const number = numberMatch[0];
+            const textWithoutNumber = text.replace(numberMatch[0], '');
+            
+            element.innerHTML = `<span class="counter-number" data-number="${number}">0</span>${textWithoutNumber}`;
+            
+            const counterElement = element.querySelector('.counter-number');
+            if (counterElement) {
+                numberObserver.observe(counterElement);
+            }
+        }
+    });
+
+    function animateNumber(element, start, end, duration) {
+        const startTime = performance.now();
+        const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+        
+        function update(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easedProgress = easeOutQuart(progress);
+            
+            const currentNumber = Math.floor(start + (end - start) * easedProgress);
+            element.textContent = currentNumber;
+            
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            } else {
+                element.textContent = end;
+                setTimeout(() => {
+                    element.classList.remove('counting');
+                }, 100);
+            }
+        }
+        
+        requestAnimationFrame(update);
+    }
 
     // 导航栏滚动效果
     function handleNavbarScroll() {
@@ -90,45 +265,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 元素进入视口时的渐入动画
-    const observerOptions = {
+    // 元素进入视口时的渐入动画（旧版，保留用于技能进度条）
+    const oldObserverOptions = {
         threshold: 0.15,
         rootMargin: '0px 0px -80px 0px'
     };
 
-    const observer = new IntersectionObserver((entries) => {
+    const oldObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-
-                // 如果是技能进度条的父元素，触发进度条动画
-                if (entry.target.closest('.skill-card')) {
-                    const progressBars = entry.target.closest('.skill-card').querySelectorAll('.skill-progress');
-                    progressBars.forEach(bar => {
-                        const width = bar.getAttribute('data-width');
-                        bar.style.width = width;
-                    });
-                }
-
-                observer.unobserve(entry.target);
+                oldObserver.unobserve(entry.target);
             }
         });
-    }, observerOptions);
+    }, oldObserverOptions);
 
-    animateElements.forEach(el => observer.observe(el));
-
-    // 技能进度条单独观察（确保在视口中时才动画）
-    const skillObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const width = entry.target.getAttribute('data-width');
-                entry.target.style.width = width;
-                skillObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.5 });
-
-    skillProgressBars.forEach(bar => skillObserver.observe(bar));
+    animateElements.forEach(el => oldObserver.observe(el));
 
     // 表单提交处理
     if (contactForm) {
@@ -181,6 +333,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 heroCardAnimated.classList.add('visible');
             }, 200);
         }
+    });
+
+    // 项目卡片点击跳转
+    document.querySelectorAll('[data-link]').forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => {
+            window.location.href = card.dataset.link;
+        });
     });
 
     // 防抖函数用于性能优化

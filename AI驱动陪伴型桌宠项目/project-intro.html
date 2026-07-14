@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学习吧小鸟 - AI陪伴型桌宠 | 项目介绍</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+      scroll-behavior: smooth;
+      background-color: #FFF9F0;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #FF8C42 0%, #FF6B4A 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .bg-orange-gradient {
+      background: linear-gradient(135deg, #FF8C42 0%, #FF6B4A 100%);
+    }
+    
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 72px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 140, 66, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      z-index: 200;
+      font-size: 14px;
+      box-shadow: 0 2px 20px rgba(255, 140, 66, 0.06);
+      transition: all 0.3s ease;
+    }
+    
+    .top-bar .center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .top-bar.scrolled {
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 4px 30px rgba(255, 140, 66, 0.1);
+    }
+    
+    .top-bar .left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .top-bar .name {
+      font-weight: 700;
+      color: #1f2937;
+      font-size: 16px;
+      letter-spacing: 0.02em;
+    }
+    
+    .top-bar .name span {
+      color: #FF8C42;
+      font-weight: 700;
+      margin-left: 6px;
+    }
+    
+    .top-bar .project-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 17px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    
+    .top-bar .project-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #FF8C42, #FF6B4A);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 18px;
+      box-shadow: 0 4px 12px rgba(255, 140, 66, 0.3);
+    }
+    
+    .top-bar .divider {
+      width: 1px;
+      height: 28px;
+      background: rgba(0, 0, 0, 0.08);
+    }
+    
+    .top-bar .right {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    
+    .top-bar .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+    
+    .top-bar .nav-links a {
+      color: #6b7280;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 8px 0;
+    }
+    
+    .top-bar .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(135deg, #FF8C42, #FF6B4A);
+      transition: width 0.3s ease;
+    }
+    
+    .top-bar .nav-links a:hover {
+      color: #FF8C42;
+    }
+    
+    .top-bar .nav-links a:hover::after {
+      width: 100%;
+    }
+    
+    .top-bar .back-link {
+      color: #6b7280;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: rgba(255, 140, 66, 0.05);
+      border: 1px solid rgba(255, 140, 66, 0.1);
+    }
+    
+    .top-bar .back-link:hover {
+      color: #fff;
+      background: linear-gradient(135deg, #FF8C42, #FF6B4A);
+      border-color: transparent;
+    }
+
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+    
+    .animate-bounce-slow {
+      animation: bounce-slow 3s ease-in-out infinite;
+    }
+    
+    @keyframes bounce-slow {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .feature-card {
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(255, 140, 66, 0.15);
+    }
+
+    .tech-tag {
+      background: rgba(255, 140, 66, 0.1);
+      color: #FF8C42;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .tech-tag:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 140, 66, 0.2);
+    }
+    
+    section {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    section#hero {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .scroll-gradient {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(to bottom, transparent 0%, rgba(255, 249, 240, 0.8) 50%, rgba(255, 249, 240, 1) 100%);
+      pointer-events: none;
+      z-index: 10;
+    }
+    
+    .section-divider {
+      position: relative;
+      height: 60px;
+      background: linear-gradient(to bottom, rgba(255, 249, 240, 1), white);
+      opacity: 0.8;
+    }
+    
+    .section-content {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease-out;
+    }
+    
+    section.visible .section-content {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .delay-100 { transition-delay: 0.1s; }
+    .delay-200 { transition-delay: 0.2s; }
+    .delay-300 { transition-delay: 0.3s; }
+    .delay-400 { transition-delay: 0.4s; }
+    .delay-500 { transition-delay: 0.5s; }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="left">
+      <div class="name">李妍越 <span>Portfolio</span></div>
+      <div class="divider"></div>
+      <div class="project-title">
+        <div class="project-icon"><i class="fa fa-bird"></i></div>
+        学习吧小鸟
+      </div>
+    </div>
+    <div class="center">
+      <div class="nav-links">
+        <a href="#hero">首页</a>
+        <a href="#background">项目背景</a>
+        <a href="#features">核心功能</a>
+        <a href="#tech">技术栈</a>
+        <a href="#ppt">项目PPT</a>
+      </div>
+    </div>
+    <div class="right">
+      <a href="../index.html#works" class="back-link">← 返回作品列表</a>
+    </div>
+  </div>
+
+  <section id="hero" class="min-h-screen flex items-center pt-20 relative overflow-hidden">
+    <div class="absolute inset-0">
+      <img src="首页大图.png" alt="背景" class="w-full h-full object-cover" />
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-t from-orange-900/70 via-orange-800/40 to-transparent"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+      <div class="text-center">
+        <div class="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium mb-8 text-white animate-fade-in">
+          <i class="fa fa-star text-yellow-300 mr-2"></i>
+          AI驱动 · 陪伴型桌宠
+        </div>
+        
+        <div class="flex justify-center mb-8">
+          <div class="relative animate-float">
+            <img src="桌宠项目.png" alt="桌宠小鸟" class="w-48 h-48 md:w-64 md:h-64 object-contain drop-shadow-2xl" />
+          </div>
+        </div>
+        
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+          学习吧小鸟
+          <br />
+          <span class="text-yellow-300">AI陪伴型桌宠系统</span>
+        </h1>
+        
+        <p class="text-lg text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed">
+          基于Qwen-Agent大模型的智能桌面宠物，为用户提供温暖的AI陪伴体验。支持语音交互、学习提醒、捉虫游戏等丰富功能，让学习生活更有趣。
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="#features" class="px-8 py-4 bg-white text-orange-600 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 flex items-center justify-center">
+            <i class="fa fa-feather mr-2"></i>
+            探索功能
+          </a>
+          <a href="#ppt" class="px-8 py-4 bg-orange-500/80 backdrop-blur-sm text-white rounded-xl font-semibold hover:bg-orange-500 hover:shadow-xl transition-all duration-300 flex items-center justify-center border border-white/30">
+            <i class="fa fa-file-pdf-o mr-2"></i>
+            查看PPT
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="scroll-gradient"></div>
+    
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce-slow">
+      <i class="fa fa-chevron-down text-white/60 text-3xl"></i>
+    </div>
+  </section>
+
+  <section id="background" class="py-24 bg-gradient-to-b from-orange-50/50 via-white to-gray-50/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 section-content">
+        <div class="inline-flex items-center px-4 py-2 bg-orange-100 text-orange-600 rounded-full text-sm font-medium mb-4">
+          <i class="fa fa-lightbulb-o mr-2"></i>
+          项目背景
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          为什么需要<span class="gradient-text">AI陪伴桌宠</span>？
+        </h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 feature-card border border-orange-100/50 section-content delay-100">
+          <div class="w-14 h-14 bg-orange-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+            <i class="fa fa-users text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">陪伴需求</h3>
+          <p class="text-gray-600 leading-relaxed">
+            在快节奏的学习生活中，用户需要一个温暖的虚拟伙伴来缓解压力，提供情感支持。
+          </p>
+        </div>
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 feature-card border border-orange-100/50 section-content delay-200">
+          <div class="w-14 h-14 bg-yellow-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+            <i class="fa fa-clock-o text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">学习管理</h3>
+          <p class="text-gray-600 leading-relaxed">
+            通过可爱的桌宠形象提醒学习计划，让时间管理变得有趣，提升学习效率。
+          </p>
+        </div>
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-8 feature-card border border-orange-100/50 section-content delay-300">
+          <div class="w-14 h-14 bg-pink-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+            <i class="fa fa-gamepad text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">趣味互动</h3>
+          <p class="text-gray-600 leading-relaxed">
+            捉虫游戏等互动玩法增加使用趣味性，让学习之余能够轻松娱乐。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="py-24 bg-gradient-to-b from-white to-orange-50/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 section-content">
+        <div class="inline-flex items-center px-4 py-2 bg-orange-100 text-orange-600 rounded-full text-sm font-medium mb-4">
+          <i class="fa fa-star mr-2"></i>
+          核心功能亮点
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <span class="gradient-text">核心功能</span>亮点
+        </h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          项目涵盖AI对话、学习提醒、捉虫游戏、任务管理四大核心模块，功能丰富，交互友好。
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-orange-100/50 section-content delay-100">
+          <div class="flex items-start">
+            <div class="w-14 h-14 bg-gradient-to-br from-orange-400 to-red-400 rounded-xl flex items-center justify-center flex-shrink-0 mr-6 shadow-lg">
+              <i class="fa fa-comments text-white text-2xl"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-900 mb-3">AI智能对话</h3>
+              <p class="text-gray-600 leading-relaxed">
+                基于Qwen-Agent大模型实现自然语言对话，支持日常闲聊、学习答疑、情感交流等多种场景。
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-orange-100/50 section-content delay-200">
+          <div class="flex items-start">
+            <div class="w-14 h-14 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-xl flex items-center justify-center flex-shrink-0 mr-6 shadow-lg">
+              <i class="fa fa-bell text-white text-2xl"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-900 mb-3">学习提醒</h3>
+              <p class="text-gray-600 leading-relaxed">
+                支持定时提醒、全时段学习提醒测试，通过可爱的动画和音效提醒用户完成学习任务。
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-orange-100/50 section-content delay-300">
+          <div class="flex items-start">
+            <div class="w-14 h-14 bg-gradient-to-br from-green-400 to-teal-400 rounded-xl flex items-center justify-center flex-shrink-0 mr-6 shadow-lg">
+              <i class="fa fa-bug text-white text-2xl"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-900 mb-3">捉虫游戏</h3>
+              <p class="text-gray-600 leading-relaxed">
+                趣味互动小游戏，点击捕捉屏幕上随机出现的虫子，增加使用趣味性和成就感。
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-orange-100/50 section-content delay-400">
+          <div class="flex items-start">
+            <div class="w-14 h-14 bg-gradient-to-br from-blue-400 to-purple-400 rounded-xl flex items-center justify-center flex-shrink-0 mr-6 shadow-lg">
+              <i class="fa fa-tasks text-white text-2xl"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-900 mb-3">任务管理</h3>
+              <p class="text-gray-600 leading-relaxed">
+                支持任务创建、删除、状态管理，教师端发布的任务可同步至学生端，实现双向同步。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tech" class="py-24 bg-gradient-to-b from-white via-orange-50/30 to-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 section-content">
+        <div class="inline-flex items-center px-4 py-2 bg-orange-100 text-orange-600 rounded-full text-sm font-medium mb-4">
+          <i class="fa fa-code mr-2"></i>
+          技术栈
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          项目<span class="gradient-text">技术架构</span>
+        </h2>
+      </div>
+      <div class="flex flex-wrap justify-center gap-4 mb-16 section-content delay-100">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Qwen-Agent</span>
+        <span class="tech-tag">PyQt5</span>
+        <span class="tech-tag">DashScope API</span>
+        <span class="tech-tag">WebSocket</span>
+        <span class="tech-tag">SQLite</span>
+        <span class="tech-tag">Taro</span>
+        <span class="tech-tag">微信小程序</span>
+      </div>
+      <div class="bg-gradient-to-br from-orange-50/50 to-yellow-50/50 rounded-2xl p-10 section-content delay-200">
+        <h3 class="text-xl font-bold text-gray-900 mb-8 text-center">系统架构</h3>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="text-center">
+            <div class="w-20 h-20 bg-white rounded-full shadow-lg flex items-center justify-center mx-auto mb-6">
+              <i class="fa fa-desktop text-3xl text-orange-500"></i>
+            </div>
+            <h4 class="font-bold text-gray-900 mb-3 text-lg">桌面端</h4>
+            <p class="text-gray-600 text-sm leading-relaxed">PyQt5桌面应用，负责桌宠展示、交互、游戏逻辑</p>
+          </div>
+          <div class="text-center">
+            <div class="w-20 h-20 bg-white rounded-full shadow-lg flex items-center justify-center mx-auto mb-6">
+              <i class="fa fa-cloud text-3xl text-blue-500"></i>
+            </div>
+            <h4 class="font-bold text-gray-900 mb-3 text-lg">服务端</h4>
+            <p class="text-gray-600 text-sm leading-relaxed">FastAPI后端服务，处理AI对话、任务同步、数据存储</p>
+          </div>
+          <div class="text-center">
+            <div class="w-20 h-20 bg-white rounded-full shadow-lg flex items-center justify-center mx-auto mb-6">
+              <i class="fa fa-mobile text-3xl text-green-500"></i>
+            </div>
+            <h4 class="font-bold text-gray-900 mb-3 text-lg">Web端</h4>
+            <p class="text-gray-600 text-sm leading-relaxed">Taro小程序，教师端发布任务，学生端接收通知</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ppt" class="py-24 bg-gradient-to-b from-orange-50/30 to-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 section-content">
+        <div class="inline-flex items-center px-4 py-2 bg-orange-100 text-orange-600 rounded-full text-sm font-medium mb-4">
+          <i class="fa fa-file-pdf-o mr-2"></i>
+          项目介绍PPT
+        </div>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          项目<span class="gradient-text">完整介绍</span>
+        </h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          查看学习吧小鸟项目的完整PPT介绍，了解项目背景、设计思路和技术实现
+        </p>
+      </div>
+      
+      <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-8 section-content delay-100">
+        <div class="flex justify-center">
+          <iframe src="学习吧小鸟--陪伴型桌宠项目.pdf" 
+                  width="100%" 
+                  height="700px" 
+                  class="rounded-xl"
+                  title="学习吧小鸟--陪伴型桌宠项目">
+          </iframe>
+        </div>
+        <div class="text-center mt-6">
+          <a href="学习吧小鸟--陪伴型桌宠项目.pdf" 
+             target="_blank" 
+             class="inline-flex items-center px-8 py-4 bg-orange-gradient text-white rounded-xl font-semibold hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-300">
+            <i class="fa fa-download mr-2"></i>
+            下载PDF
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-gray-900 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="flex items-center space-x-2 mb-4 md:mb-0">
+          <div class="w-8 h-8 bg-orange-gradient rounded-full flex items-center justify-center">
+            <i class="fa fa-bird text-white"></i>
+          </div>
+          <span class="text-white font-bold">学习吧小鸟</span>
+        </div>
+        <div class="text-gray-400 text-sm">
+          AI驱动陪伴型桌宠毕业设计项目 | 温暖你的学习时光
+        </div>
+        <div class="flex items-center space-x-4 mt-4 md:mt-0">
+          <a href="#" class="text-gray-400 hover:text-white transition-colors">
+            <i class="fa fa-github"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors">
+            <i class="fa fa-linkedin"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    const topBar = document.querySelector('.top-bar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        topBar.classList.add('scrolled');
+      } else {
+        topBar.classList.remove('scrolled');
+      }
+    });
+
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('section').forEach(section => {
+      sectionObserver.observe(section);
+    });
+  </script>
+</body>
+</html>
