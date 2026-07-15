@@ -1244,68 +1244,6 @@
             display: none;
         }
 
-        .video-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            background: #f8f9fa;
-            position: absolute;
-            top: 0;
-            left: 0;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .video-placeholder:hover {
-            background: #f1f5f9;
-        }
-
-        .video-placeholder .play-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: #dc2626;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 24px rgba(220, 38, 38, 0.3);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .video-placeholder:hover .play-icon {
-            transform: scale(1.1);
-            box-shadow: 0 12px 32px rgba(220, 38, 38, 0.4);
-        }
-
-        .video-placeholder .play-icon i {
-            font-size: 1.5rem;
-            color: #fff;
-            margin-left: 3px;
-        }
-
-        .video-placeholder .video-info {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #1e293b;
-        }
-
-        .video-placeholder .video-size {
-            font-size: 0.8rem;
-            color: #94a3b8;
-        }
-
-        .video-wrapper video.hidden {
-            display: none;
-        }
-
-        .video-wrapper video:not(.hidden) {
-            display: block;
-        }
-
         /* B站风格音量控制 */
         .volume-control {
             position: absolute;
@@ -2066,12 +2004,16 @@
             <h2 class="section-title scroll-animate">演示<span>视频</span></h2>
             <p class="section-desc scroll-animate">观看系统完整演示，了解智能分诊的实际效果</p>
             <div class="video-wrapper" id="video-wrapper">
-                <div id="video-placeholder" class="video-placeholder" onclick="playVideo()">
-                    <div class="play-icon"><i class="fas fa-play"></i></div>
-                    <div class="video-info">点击播放演示视频</div>
-                    <div class="video-size">10.3 MB</div>
+                <div class="play-overlay" onclick="playVideo()">
+                    <div class="video-cover">
+                        <div class="cover-icon">
+                            <i class="fas fa-stethoscope"></i>
+                        </div>
+                        <div class="cover-title">智能分诊系统演示</div>
+                        <div class="cover-subtitle">LangGraph · RAG · 多轮对话</div>
+                    </div>
                 </div>
-                <video id="demo-video" controls class="hidden" poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                <video id="demo-video" controls>
                     <source src="基于langgraph项目-项目介绍-h264.mp4" type="video/mp4">
                     浏览器不支持视频播放
                 </video>
@@ -2393,13 +2335,14 @@ python webUI.py</code></pre>
 
         function playVideo() {
             const video = document.getElementById('demo-video');
-            const placeholder = document.getElementById('video-placeholder');
+            const playOverlay = document.querySelector('.play-overlay');
             const volumeControl = document.getElementById('volume-control');
-            if (video && placeholder) {
-                placeholder.style.display = 'none';
-                video.classList.remove('hidden');
+            if (video && playOverlay) {
+                playOverlay.style.display = 'none';
+                video.style.display = 'block';
                 video.play();
                 
+                // Show volume control
                 if (volumeControl) {
                     volumeControl.classList.add('show');
                 }
