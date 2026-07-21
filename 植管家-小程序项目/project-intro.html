@@ -48,6 +48,26 @@
       animation: float 6s ease-in-out infinite;
     }
     
+    .img-placeholder {
+      background: linear-gradient(110deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    
+    .progressive-img {
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    
+    .progressive-img.loaded {
+      opacity: 1;
+    }
+    
     @keyframes float {
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(-20px); }
@@ -653,12 +673,14 @@
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="group rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer">
-          <div class="w-full h-64 bg-green-50 flex items-center justify-center overflow-hidden">
+          <div class="w-full h-64 bg-green-50 flex items-center justify-center overflow-hidden relative">
+            <div class="absolute inset-0 img-placeholder"></div>
             <picture>
               <source loading="lazy" srcset="网站图片/首页.webp" type="image/webp">
               <img loading="lazy" src="网站图片/首页.jpg" 
                    alt="首页" 
-                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" />
+                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 progressive-img" 
+                   onload="this.classList.add('loaded')" />
             </picture>
           </div>
           <div class="p-4 bg-white">
@@ -668,12 +690,14 @@
         </div>
         
         <div class="group rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer">
-          <div class="w-full h-64 bg-green-50 flex items-center justify-center overflow-hidden">
+          <div class="w-full h-64 bg-green-50 flex items-center justify-center overflow-hidden relative">
+            <div class="absolute inset-0 img-placeholder"></div>
             <picture>
               <source loading="lazy" srcset="网站图片/鲜花商城.webp" type="image/webp">
               <img loading="lazy" src="网站图片/鲜花商城.jpg" 
                    alt="鲜花商城" 
-                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" />
+                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 progressive-img" 
+                   onload="this.classList.add('loaded')" />
             </picture>
           </div>
           <div class="p-4 bg-white">
@@ -683,12 +707,14 @@
         </div>
         
         <div class="group rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer">
-          <div class="w-full h-64 bg-green-50 flex items-center justify-center overflow-hidden">
+          <div class="w-full h-64 bg-green-50 flex items-center justify-center overflow-hidden relative">
+            <div class="absolute inset-0 img-placeholder"></div>
             <picture>
               <source loading="lazy" srcset="网站图片/智能花盆管理.webp" type="image/webp">
               <img loading="lazy" src="网站图片/智能花盆管理.jpg" 
                    alt="智能花盆管理" 
-                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" />
+                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 progressive-img" 
+                   onload="this.classList.add('loaded')" />
             </picture>
           </div>
           <div class="p-4 bg-white">
@@ -698,12 +724,14 @@
         </div>
         
         <div class="group rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer">
-          <div class="w-full h-64 bg-green-50 flex items-center justify-center overflow-hidden">
+          <div class="w-full h-64 bg-green-50 flex items-center justify-center overflow-hidden relative">
+            <div class="absolute inset-0 img-placeholder"></div>
             <picture>
               <source loading="lazy" srcset="网站图片/花卉社区.webp" type="image/webp">
               <img loading="lazy" src="网站图片/花卉社区.jpg" 
                    alt="花卉社区" 
-                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" />
+                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 progressive-img" 
+                   onload="this.classList.add('loaded')" />
             </picture>
           </div>
           <div class="p-4 bg-white">
@@ -713,12 +741,14 @@
         </div>
         
         <div class="group rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer">
-          <div class="w-full h-64 bg-green-50 flex items-center justify-center overflow-hidden">
+          <div class="w-full h-64 bg-green-50 flex items-center justify-center overflow-hidden relative">
+            <div class="absolute inset-0 img-placeholder"></div>
             <picture>
               <source loading="lazy" srcset="网站图片/线下花店.webp" type="image/webp">
               <img loading="lazy" src="网站图片/线下花店.jpg" 
                    alt="线下花店" 
-                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" />
+                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 progressive-img" 
+                   onload="this.classList.add('loaded')" />
             </picture>
           </div>
           <div class="p-4 bg-white">
@@ -728,12 +758,14 @@
         </div>
         
         <div class="group rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer">
-          <div class="w-full h-64 bg-green-50 flex items-center justify-center overflow-hidden">
+          <div class="w-full h-64 bg-green-50 flex items-center justify-center overflow-hidden relative">
+            <div class="absolute inset-0 img-placeholder"></div>
             <picture>
               <source loading="lazy" srcset="网站图片/实时监控.webp" type="image/webp">
               <img loading="lazy" src="网站图片/实时监控.jpg" 
                    alt="实时监控" 
-                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" />
+                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 progressive-img" 
+                   onload="this.classList.add('loaded')" />
             </picture>
           </div>
           <div class="p-4 bg-white">
@@ -743,12 +775,14 @@
         </div>
         
         <div class="group rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer">
-          <div class="w-full h-64 bg-green-50 flex items-center justify-center overflow-hidden">
+          <div class="w-full h-64 bg-green-50 flex items-center justify-center overflow-hidden relative">
+            <div class="absolute inset-0 img-placeholder"></div>
             <picture>
               <source loading="lazy" srcset="网站图片/订单列表.webp" type="image/webp">
               <img loading="lazy" src="网站图片/订单列表.jpg" 
                    alt="订单管理" 
-                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" />
+                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 progressive-img" 
+                   onload="this.classList.add('loaded')" />
             </picture>
           </div>
           <div class="p-4 bg-white">
@@ -758,12 +792,14 @@
         </div>
         
         <div class="group rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer">
-          <div class="w-full h-64 bg-green-50 flex items-center justify-center overflow-hidden">
+          <div class="w-full h-64 bg-green-50 flex items-center justify-center overflow-hidden relative">
+            <div class="absolute inset-0 img-placeholder"></div>
             <picture>
               <source loading="lazy" srcset="网站图片/个人中心.webp" type="image/webp">
               <img loading="lazy" src="网站图片/个人中心.jpg" 
                    alt="个人中心" 
-                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500" />
+                   class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 progressive-img" 
+                   onload="this.classList.add('loaded')" />
             </picture>
           </div>
           <div class="p-4 bg-white">
